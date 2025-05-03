@@ -10,7 +10,6 @@ export default function BlogPage() {
       <Helmet>
         <title> Blog | Minimal UI </title>
       </Helmet>
-
       <BlogView />
     </>
   );
