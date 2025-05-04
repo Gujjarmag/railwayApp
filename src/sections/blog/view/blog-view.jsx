@@ -22,19 +22,38 @@ import {
   Grid,
 } from '@mui/material';
 import Iconify from 'src/components/iconify';
+import axios from 'axios';
 
 // -----------------------------------------------
 
-const DataTable = ({ title, columns, data, emptyMsg }) => (
-  <Card>
-    <CardHeader title={title} />
-    <CardContent>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
+const DataTable = ({ title, icon, columns, data, emptyMsg }) => (
+  <Card
+    elevation={4}
+    sx={{
+      borderRadius: 3,
+      overflow: 'hidden',
+    }}
+  >
+    <CardHeader
+      avatar={icon && <Iconify icon={icon} width={28} height={28} />}
+      title={
+        <Typography variant="h6" fontWeight="bold">
+          {title}
+        </Typography>
+      }
+      sx={{
+        backgroundColor: 'primary.main',
+        color: 'white',
+        py: 2,
+      }}
+    />
+    <CardContent sx={{ p: 0 }}>
+      <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
+        <Table size="small">
+          <TableHead sx={{ backgroundColor: '#f4f6f8' }}>
             <TableRow>
               {columns.map((col, idx) => (
-                <TableCell key={idx} align={col.align || 'left'}>
+                <TableCell key={idx} align={col.align || 'left'} sx={{ fontWeight: 'bold' }}>
                   {col.label}
                 </TableCell>
               ))}
@@ -64,17 +83,17 @@ const DataTable = ({ title, columns, data, emptyMsg }) => (
     </CardContent>
   </Card>
 );
+
 DataTable.propTypes = {
   title: PropTypes.string.isRequired,
+  icon: PropTypes.string,
   columns: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       align: PropTypes.oneOf(['left', 'right', 'center']),
     })
   ).isRequired,
-  data: PropTypes.arrayOf(
-    PropTypes.array // assuming data is an array of arrays (rows)
-  ).isRequired,
+  data: PropTypes.arrayOf(PropTypes.array).isRequired,
   emptyMsg: PropTypes.string.isRequired,
 };
 
@@ -151,6 +170,7 @@ export default function AnalyticsView() {
           <Grid item xs={12} md={6}>
             <DataTable
               title="Late Trains"
+              icon="mdi:clock-alert-outline"
               columns={[{ label: 'Train Name' }]}
               data={lateTrains}
               emptyMsg="No late trains"
@@ -159,6 +179,7 @@ export default function AnalyticsView() {
           <Grid item xs={12} md={6}>
             <DataTable
               title="Full Trains"
+              icon="mdi:train-car"
               columns={[{ label: 'Train Name' }]}
               data={fullTrains}
               emptyMsg="No full trains"
@@ -172,6 +193,7 @@ export default function AnalyticsView() {
           <Grid item xs={12} md={6}>
             <DataTable
               title="Top Fares"
+              icon="mdi:currency-inr"
               columns={[{ label: 'Train Name' }, { label: 'Fare (Rs)', align: 'right' }]}
               data={topFares.map(([name, fare]) => [name, fare.toLocaleString()])}
               emptyMsg="No fare data"
@@ -185,6 +207,7 @@ export default function AnalyticsView() {
           <Grid item xs={12} md={6}>
             <DataTable
               title="Top Passengers"
+              icon="mdi:account-group-outline"
               columns={[{ label: 'Train Name' }, { label: 'Passenger Count', align: 'right' }]}
               data={topPassengers}
               emptyMsg="No passenger data"
@@ -193,6 +216,7 @@ export default function AnalyticsView() {
           <Grid item xs={12} md={6}>
             <DataTable
               title="Top Logins"
+              icon="mdi:login-variant"
               columns={[{ label: 'Train Name' }, { label: 'Login Count', align: 'right' }]}
               data={topLogins}
               emptyMsg="No login data"
